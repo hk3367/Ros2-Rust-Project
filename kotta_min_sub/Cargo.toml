@@ -1,0 +1,18 @@
+[package]
+name = "kotta_min_sub"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "minimal_subscriber"
+path = "src/minimal_subscriber.rs"
+
+[dependencies]
+anyhow = {version = "1", features = ["backtrace"]}
+rclrs = "0.4"
+rosidl_runtime_rs = "0.4"
+example_interfaces = "*"
+nav_msgs = "*"
+
+# This specific version is compatible with Rust 1.75
+backtrace = "=0.3.74"
