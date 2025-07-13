@@ -501,6 +501,7 @@ dependencies = [
  "nav_msgs",
  "rclrs",
  "rosidl_runtime_rs",
+ "sensor_msgs",
 ]
 
 [[package]]
@@ -748,6 +749,16 @@ name = "rustversion"
 version = "1.0.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8a0d197bd2c9dc6e53b84da9556a69ba4cdfab8619eb41a8bd1cc2027a0f6b1d"
+
+[[package]]
+name = "sensor_msgs"
+version = "4.9.0"
+dependencies = [
+ "builtin_interfaces",
+ "geometry_msgs",
+ "rosidl_runtime_rs",
+ "std_msgs",
+]
 
 [[package]]
 name = "shlex"
@@ -1101,10 +1112,6 @@ version = "1.2.1"
 [[patch.unused]]
 name = "rust_pubsub"
 version = "0.1.0"
-
-[[patch.unused]]
-name = "sensor_msgs"
-version = "4.9.0"
 
 [[patch.unused]]
 name = "shape_msgs"
