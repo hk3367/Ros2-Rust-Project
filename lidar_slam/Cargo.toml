@@ -1,11 +1,11 @@
 [package]
-name = "kotta_min_sub"
+name = "lidar_slam"
 version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "minimal_subscriber"
-path = "src/minimal_subscriber.rs"
+name = "lidar_odometry"
+path = "src/lidar_odometry.rs"
 
 [dependencies]
 anyhow = {version = "1", features = ["backtrace"]}

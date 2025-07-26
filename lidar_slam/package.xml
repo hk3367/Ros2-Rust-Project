@@ -1,5 +1,5 @@
 <package format="3">
-  <name>kotta_min_sub</name>
+    <name>lidar_slam</name>
   <version>0.1.0</version>
   <description>project package.</description>
   <maintainer email="hk3367@columbia.edu">Harsha Kotta</maintainer>
