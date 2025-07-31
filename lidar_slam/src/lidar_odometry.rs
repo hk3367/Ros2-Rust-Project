@@ -30,8 +30,18 @@ impl LidarOdomNode {
     fn lidar_callback(&self, scan_msg: LaserScan) -> () {
         println!("Laser Scan: {:?}", scan_msg);
         println!("Odom in Scan Callback, {:?}", self.odom);
-        println!("Previous Scan Odom, {:?}", self.prev_scan_odom);
-        *self.prev_scan_odom.lock().unwrap() = self.odom.lock().unwrap().clone();
+
+        let mut previous_scan_odom_guard = self.prev_scan_odom.lock().unwrap();
+        match previous_scan_odom_guard.take() {
+            None => {
+                println!("prev odom is none initializing");
+                *previous_scan_odom_guard = self.odom.lock().unwrap().clone();
+            }
+            Some(prev_scan_odom) => {
+                println!("Previous Scan Odom, {:?}", prev_scan_odom);
+                *previous_scan_odom_guard = self.odom.lock().unwrap().clone();
+            }
+        }
     }
 }
 
