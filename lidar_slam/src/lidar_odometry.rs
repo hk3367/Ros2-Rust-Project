@@ -2,25 +2,36 @@ use anyhow::{Error, Result};
 use nav_msgs::msg::Odometry;
 use rclrs::*;
 use sensor_msgs::msg::LaserScan;
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 
 struct LidarOdomNode {
     worker: Worker<usize>,
+    odom: Mutex<Option<Odometry>>,
+    prev_scan_odom: Mutex<Option<Odometry>>,
 }
 
 impl LidarOdomNode {
     fn new(executor: &Executor) -> Result<Self, RclrsError> {
         let node = executor.create_node("lidar_odometry_node")?;
         let worker = node.create_worker::<usize>(0);
-        Ok(Self {  worker })
+        let odom = Mutex::new(None);
+        let prev_scan_odom = Mutex::new(None);
+        Ok(Self {
+            worker,
+            odom,
+            prev_scan_odom,
+        })
     }
 
     fn odom_callback(&self, odom_msg: Odometry) -> () {
-        println!("Odometry: {:?}", odom_msg);
+        *self.odom.lock().unwrap() = Some(odom_msg);
     }
 
     fn lidar_callback(&self, scan_msg: LaserScan) -> () {
         println!("Laser Scan: {:?}", scan_msg);
+        println!("Odom in Scan Callback, {:?}", self.odom);
+        println!("Previous Scan Odom, {:?}", self.prev_scan_odom);
+        *self.prev_scan_odom.lock().unwrap() = self.odom.lock().unwrap().clone();
     }
 }
 
