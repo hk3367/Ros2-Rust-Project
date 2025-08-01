@@ -1,8 +1,10 @@
 use anyhow::{Error, Result};
+use geometry_msgs::msg::PoseWithCovariance;
 use nav_msgs::msg::Odometry;
 use rclrs::*;
 use sensor_msgs::msg::LaserScan;
 use std::sync::{Arc, Mutex};
+extern crate nalgebra as na;
 
 struct LidarOdomNode {
     worker: Worker<usize>,
@@ -38,11 +40,27 @@ impl LidarOdomNode {
                 *previous_scan_odom_guard = self.odom.lock().unwrap().clone();
             }
             Some(prev_scan_odom) => {
-                println!("Previous Scan Odom, {:?}", prev_scan_odom);
+                let (tf_odom2map, prev_scan_cov) = pose_w_cov_to_nalgebra(&prev_scan_odom.pose);
+                println!("Previous Scan Odom Isometry, {:?}", tf_odom2map);
+                println!("Previous Scan Odom Covariance, {:?}", prev_scan_cov);
                 *previous_scan_odom_guard = self.odom.lock().unwrap().clone();
             }
         }
     }
+}
+
+fn pose_w_cov_to_nalgebra(
+    pose_with_cov: &PoseWithCovariance,
+) -> (na::Isometry3<f64>, na::Matrix6<f64>) {
+    let position = &pose_with_cov.pose.position;
+    let covariance = &pose_with_cov.covariance;
+    let orientation = &pose_with_cov.pose.orientation;
+    let translation = na::Translation3::new(position.x, position.y, position.z);
+    let rotation = na::Quaternion::new(orientation.w, orientation.x, orientation.y, orientation.z);
+    let unit_quat = na::Unit::from_quaternion(rotation);
+    let transform = na::Isometry3::from_parts(translation, unit_quat);
+    let cov_mat = na::Matrix6::from_row_slice(covariance);
+    (transform, cov_mat)
 }
 
 fn main() -> Result<(), Error> {
