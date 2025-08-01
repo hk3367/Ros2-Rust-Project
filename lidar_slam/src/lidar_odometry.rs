@@ -30,22 +30,35 @@ impl LidarOdomNode {
     }
 
     fn lidar_callback(&self, scan_msg: LaserScan) -> () {
-        println!("Laser Scan: {:?}", scan_msg);
-        println!("Odom in Scan Callback, {:?}", self.odom);
-
         let mut previous_scan_odom_guard = self.prev_scan_odom.lock().unwrap();
+        let mut tf_robot2prev_odom: na::Isometry3<f64> = Default::default();
+        let mut prev_scan_odom_cov: na::Matrix6<f64> = Default::default();
         match previous_scan_odom_guard.take() {
             None => {
                 println!("prev odom is none initializing");
                 *previous_scan_odom_guard = self.odom.lock().unwrap().clone();
             }
             Some(prev_scan_odom) => {
-                let (tf_odom2map, prev_scan_cov) = pose_w_cov_to_nalgebra(&prev_scan_odom.pose);
-                println!("Previous Scan Odom Isometry, {:?}", tf_odom2map);
-                println!("Previous Scan Odom Covariance, {:?}", prev_scan_cov);
+                (tf_robot2prev_odom, prev_scan_odom_cov) =
+                    pose_w_cov_to_nalgebra(&prev_scan_odom.pose);
                 *previous_scan_odom_guard = self.odom.lock().unwrap().clone();
             }
         }
+
+        let odom_ref_guard = self.odom.lock().unwrap();
+        let mut tf_robot2odom: na::Isometry3<f64> = Default::default();
+        let mut odom_cov: na::Matrix6<f64> = Default::default();
+        match odom_ref_guard.as_ref() {
+            None => (),
+            Some(odom_ref_guard) => {
+                (tf_robot2odom, odom_cov) = pose_w_cov_to_nalgebra(&odom_ref_guard.pose);
+            }
+        }
+        println!("Previous Scan Odom Isometry, {:?}", tf_robot2prev_odom);
+        println!("Previous Scan Odom Covariance, {:?}", prev_scan_odom_cov);
+        println!("Laser Scan: {:?}", scan_msg);
+        println!("Odom in Scan Callback, {:?}", tf_robot2odom);
+        println!("Odom Covariance, {:?}", odom_cov);
     }
 }
 
