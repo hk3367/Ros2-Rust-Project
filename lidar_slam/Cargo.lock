@@ -640,11 +640,21 @@ dependencies = [
  "backtrace",
  "example_interfaces",
  "geometry_msgs",
+ "lidarslam_lib",
  "nalgebra",
  "nav_msgs",
  "rclrs",
  "rosidl_runtime_rs",
  "sensor_msgs",
+]
+
+[[package]]
+name = "lidarslam_lib"
+version = "0.1.0"
+dependencies = [
+ "geometry_msgs",
+ "nalgebra",
+ "rosidl_runtime_rs",
 ]
 
 [[package]]
@@ -1316,30 +1326,6 @@ name = "diagnostic_msgs"
 version = "4.9.0"
 
 [[patch.unused]]
-name = "examples_logging_demo"
-version = "0.1.0"
-
-[[patch.unused]]
-name = "examples_parameter_demo"
-version = "0.1.0"
-
-[[patch.unused]]
-name = "examples_rclrs_message_demo"
-version = "0.4.1"
-
-[[patch.unused]]
-name = "examples_rclrs_minimal_client_service"
-version = "0.4.1"
-
-[[patch.unused]]
-name = "examples_rclrs_minimal_pub_sub"
-version = "0.4.1"
-
-[[patch.unused]]
-name = "examples_worker_demo"
-version = "0.1.0"
-
-[[patch.unused]]
 name = "lidar_slam"
 version = "0.1.0"
 
@@ -1352,16 +1338,8 @@ name = "rcl_interfaces"
 version = "1.2.1"
 
 [[patch.unused]]
-name = "rclrs_example_msgs"
-version = "0.4.1"
-
-[[patch.unused]]
 name = "rosgraph_msgs"
 version = "1.2.1"
-
-[[patch.unused]]
-name = "rust_pubsub"
-version = "0.1.0"
 
 [[patch.unused]]
 name = "shape_msgs"

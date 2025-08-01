@@ -1,0 +1,9 @@
+[package]
+name = "lidarslam_lib"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+geometry_msgs = "*"
+nalgebra = "0.34.0"
+rosidl_runtime_rs = "0.4"

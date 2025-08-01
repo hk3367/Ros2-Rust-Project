@@ -15,6 +15,7 @@ example_interfaces = "*"
 nav_msgs = "*"
 sensor_msgs = "*"
 geometry_msgs = "*"
+lidarslam_lib = { path = "../lidarslam_lib" }
 
 # This specific version is compatible with Rust 1.75
 backtrace = "=0.3.74"
